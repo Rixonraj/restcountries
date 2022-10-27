@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://restcountries.com/v3.1/all", true);
+        xhr.send();
+        xhr.onload = (e) => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log(JSON.parse(xhr.responseText));
+                    const restCountries = JSON.parse(xhr.responseText);
+                    let asianCountries = restCountries.filter((country) => country.region == "Asia").map(x => x.name.common);
+                    // Get all the countries from the Asia continent /region using the Filter function
+                    console.log("asianCountries",asianCountries)
+                    let countriesBelow2Lakh = restCountries.filter((country) => country.population < 200000).map(x => x.name.common);
+                    // Get all the countries with a population of less than 2 lakhs using Filter function
+                    console.log("countries population below 2Lakh",countriesBelow2Lakh);
+                    // Print the following details name, capital, flag using forEach function
+                    restCountries.forEach(element => {
+                    console.log("NAME : ",element.name,"CAPITAL : ",element.capital,"FLAG : ",element.flags)
+                    });
+                    let populationArray = restCountries.map(x => x.population);
+                    let totalPopulation = populationArray.reduce((previousValue, currentValue) => previousValue + currentValue);
+                    // Print the total population of countries using reduce function
+                    console.log("Total Population :",totalPopulation);
+                    let countriesUSD = restCountries.filter((country) => country.currencies).filter((countryWithCurrency) => Object.keys(countryWithCurrency.currencies)[0] == "USD").map(x => x.name.common);
+                    // Print the country which uses US Dollars as currency.
+                    console.log("countries USING USD",countriesUSD)
+                } else {
+                    console.error(xhr.statusText);
+                }
+            }
+        };
+
+    </script>
+</body>
+
+</html>
